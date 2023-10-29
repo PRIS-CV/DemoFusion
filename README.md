@@ -1,7 +1,7 @@
 # DemoFusion
 [![PyTorch](https://img.shields.io/badge/PyTorch-v2.1.0-red.svg)](https://pytorch.org/)
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Diffusers-orange.svg)](https://huggingface.co/docs/diffusers/index)
-[![Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://example.com/project](https://ruoyidu.github.io/demofusion/demofusion.html)
+[![Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://ruoyidu.github.io/demofusion/demofusion.html)
 [![arXiv](https://img.shields.io/badge/arXiv-2101.12345-b31b1b.svg)](https://arxiv.org/abs/2101.12345)
 
 Code release for "DemoFusion: Democratising High-resolution Image Generation without a Sweat" (arXiv）
