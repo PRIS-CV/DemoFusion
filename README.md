@@ -13,7 +13,7 @@ Code release for "DemoFusion: Democratising High-resolution Image Generation wit
 # News
 
 # Todos
-The code will coming soon.
+The code will come soon.
 
 # Usage
 
