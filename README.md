@@ -30,6 +30,3 @@ If you find this paper useful in your research, please consider citing:
 ```
 - duruoyi@bupt.edu.cn
 - mazhanyu@bupt.edu.cn
-
-## Acknowledgement
-Our code is mainly built upon [Generalized Category Discovery](https://github.com/sgvaze/generalized-category-discovery). We appreciate their unreserved sharing.
