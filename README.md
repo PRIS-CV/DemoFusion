@@ -13,7 +13,7 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 <img src="progressive_process.jpg" width="800"/>
 
 # News
-The code will come very soon.
+The code will come VERY soon.
 
 # Usage
 
