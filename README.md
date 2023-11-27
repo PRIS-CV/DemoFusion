@@ -16,6 +16,28 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 The code will come VERY soon.
 
 # Usage
+- Download `pipeline_demofusion_sdxl.py` and run it as follows. 
+```
+from pipeline_demofusion_sdxl import DemoFusionSDXLPipeline
+
+model_ckpt = "../View_Inversion/stable-diffusion-xl-base-1.0"
+pipe = DemoFusionSDXLPipeline.from_pretrained(model_ckpt, torch_dtype=torch.float16)
+pipe = pipe.to("cuda")
+
+prompt = "Envision a portrait of an elderly woman, her face a canvas of time, framed by a headscarf with muted tones of rust and cream. Her eyes, blue like faded denim. Her attire, simple yet dignified."
+negative_prompt = "blurry, ugly, duplicate, poorly drawn, deformed, mosaic, repeating"
+
+images = pipe(prompt, negative_prompt=negative_prompt,
+              height=3072, width=3072, view_batch_size=16, stride=64,
+              num_inference_steps=50, guidance_scale=7.5,
+              cosine_scale_1=3, cosine_scale_2=1, cosine_scale_3=1, sigma=1,
+              multi_decoder=True, show_image=True
+             )
+```
+- Please feel free to change the prompt and resolution. Default hyper-parameters are recommended. For specific impacts of each hyper-parameters, please refer to Appendix C
+                in the DemoFusion paper.
+- An example can be found in `demo.ipynb`.
+
 
 ## Citation
 If you find this paper useful in your research, please consider citing:
