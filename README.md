@@ -16,6 +16,11 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 The code will come VERY soon.
 
 # Usage
+- The version requirements of core dependencies.
+```
+torch==2.1.0
+diffusers==0.21.4
+```
 - Download `pipeline_demofusion_sdxl.py` and run it as follows. 
 ```
 from pipeline_demofusion_sdxl import DemoFusionSDXLPipeline
@@ -36,7 +41,7 @@ images = pipe(prompt, negative_prompt=negative_prompt,
 ```
 - Please feel free to change the prompt and resolution. Default hyper-parameters are recommended. For specific impacts of each hyper-parameters, please refer to Appendix C
                 in the DemoFusion paper.
-- An example can be found in `demo.ipynb`.
+- Example codes can also be found in `demo.ipynb`.
 
 
 ## Citation
