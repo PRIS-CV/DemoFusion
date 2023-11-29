@@ -14,7 +14,7 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 <img src="progressive_process.jpg" width="800"/>
 
 # News
-The code will come VERY soon.
+- **2023.11.29**: 'pipeline_demofusion_sdxl' is released.
 
 # Usage
 - The version requirements of core dependencies.
