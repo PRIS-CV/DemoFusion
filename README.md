@@ -26,7 +26,7 @@ diffusers==0.21.4
 ```
 from pipeline_demofusion_sdxl import DemoFusionSDXLPipeline
 
-model_ckpt = "../View_Inversion/stable-diffusion-xl-base-1.0"
+model_ckpt = "stabilityai/stable-diffusion-xl-base-1.0"
 pipe = DemoFusionSDXLPipeline.from_pretrained(model_ckpt, torch_dtype=torch.float16)
 pipe = pipe.to("cuda")
 
@@ -36,13 +36,14 @@ negative_prompt = "blurry, ugly, duplicate, poorly drawn, deformed, mosaic, repe
 images = pipe(prompt, negative_prompt=negative_prompt,
               height=3072, width=3072, view_batch_size=16, stride=64,
               num_inference_steps=50, guidance_scale=7.5,
-              cosine_scale_1=3, cosine_scale_2=1, cosine_scale_3=1, sigma=1,
+              cosine_scale_1=3, cosine_scale_2=1, cosine_scale_3=1, sigma=0.8,
               multi_decoder=True, show_image=True
              )
 ```
-- Please feel free to change the prompt and resolution. Default hyper-parameters are recommended. For specific impacts of each hyper-parameters, please refer to Appendix C
-                in the DemoFusion paper.
-- Example codes can also be found in `demo.ipynb`.
+- Please feel free to try different prompts and resolutions.
+- Default hyper-parameters are recommended, but they may not be optimal for all cases. For specific impacts of each hyper-parameter, please refer to Appendix C in the DemoFusion paper.
+- The code was cleaned before the release. If you encounter any issues, please contact us.
+- A use case can be found in `demo.ipynb`.
 
 
 ## Citation
