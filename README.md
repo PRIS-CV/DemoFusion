@@ -56,5 +56,3 @@ If you find this paper useful in your research, please consider citing:
     year={2023}
 }
 ```
-- duruoyi@bupt.edu.cn
-- mazhanyu@bupt.edu.cn
