@@ -5,7 +5,7 @@
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Diffusers-orange.svg)](https://huggingface.co/docs/diffusers/index)
 [![Page Views Count](https://badges.toozhao.com/badges/01HFMAPCVTA1T32KN2PASNYGYK/blue.svg)](https://badges.toozhao.com/stats/01HFMAPCVTA1T32KN2PASNYGYK "Get your own page views count badge on badges.toozhao.com")
 
-Code release for "DemoFusion: Democratising High-Resolution Image Generation With No 💰" (arXiv）
+Code release for "DemoFusion: Democratising High-Resolution Image Generation With No 💰" (arXiv 2023)
 
 <img src="illustration.jpg" width="800"/>
 
