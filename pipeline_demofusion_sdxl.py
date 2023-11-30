@@ -602,9 +602,9 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
 
     def tiled_decode(self, latents, current_height, current_width):
         sample_size = self.unet.config.sample_size
-        core_size = self.unet.config.sample_size // 3
+        core_size = self.unet.config.sample_size // 4
         core_stride = core_size
-        pad_size = self.unet.config.sample_size // 3
+        pad_size = self.unet.config.sample_size // 4 * 3
         decoder_view_batch_size = 1
         
         views = self.get_views(current_height, current_width, stride=core_stride, window_size=core_size)
@@ -1068,7 +1068,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
                 for i, t in enumerate(timesteps):
                     count = torch.zeros_like(latents)
                     value = torch.zeros_like(latents)
-                    cosine_factor = 0.5 * (1 + torch.cos(torch.tensor(torch.pi * i / num_inference_steps)))
+                    cosine_factor = 0.5 * (1 + torch.cos(torch.pi * (self.scheduler.config.num_train_timesteps - t) / self.scheduler.config.num_train_timesteps)).cpu()
 
                     c1 = cosine_factor ** cosine_scale_1
                     latents = latents * (1 - c1) + noise_latents[i] * c1
