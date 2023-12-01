@@ -3,6 +3,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2101.12345-b31b1b.svg)](https://arxiv.org/pdf/2311.16973.pdf)
 [![PyTorch](https://img.shields.io/badge/PyTorch-v2.1.0-red.svg)](https://pytorch.org/)
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Diffusers-orange.svg)](https://huggingface.co/docs/diffusers/index)
+[![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion)
 [![Page Views Count](https://badges.toozhao.com/badges/01HFMAPCVTA1T32KN2PASNYGYK/blue.svg)](https://badges.toozhao.com/stats/01HFMAPCVTA1T32KN2PASNYGYK "Get your own page views count badge on badges.toozhao.com")
 
 Code release for "DemoFusion: Democratising High-Resolution Image Generation With No 💰" (arXiv 2023)
@@ -14,6 +15,7 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 <img src="progressive_process.jpg" width="800"/>
 
 # News
+- **2023.12.01**: Integrated to :rocket: [Replicate](https://replicate.com/explore). Try out online demo! [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion) Thank [Luis C.](https://github.com/lucataco) for the implementation!
 - **2023.11.29**: 'pipeline_demofusion_sdxl' is released.
 
 # Usage
