@@ -48,9 +48,9 @@ images = pipe(prompt, negative_prompt=negative_prompt,
 If you find this paper useful in your research, please consider citing:
 ```
 @article{du2023demofusion,
-    title={DemoFusion: Democratising High-Resolution Image Generation With No $$$},
-    author={Ruoyi Du and Dongliang Chang and Timothy M. Hospedales and Yi-Zhe Song and Zhanyu Ma},
-    journal={arXiv},
-    year={2023}
+  title={DemoFusion: Democratising High-Resolution Image Generation With No $$$},
+  author={Du, Ruoyi and Chang, Dongliang and Hospedales, Timothy and Song, Yi-Zhe and Ma, Zhanyu},
+  journal={arXiv preprint arXiv:2311.16973},
+  year={2023}
 }
 ```
