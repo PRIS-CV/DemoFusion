@@ -17,7 +17,7 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 - **2023.11.29**: 'pipeline_demofusion_sdxl' is released.
 
 # Usage
-### Running the default setting in the paper (will take about 17 Gb of VRAM)
+### Running the default setting in the paper (will take about 17 GB of VRAM)
 - The version requirements of core dependencies.
 ```
 torch==2.1.0
@@ -48,7 +48,7 @@ for i, image in enumerate(images):
 - Default hyper-parameters are recommended, but they may not be optimal for all cases. For specific impacts of each hyper-parameter, please refer to Appendix C in the DemoFusion paper.
 - The code was cleaned before the release. If you encounter any issues, please contact us.
 
-### Running on Windows with 8 Gb of VRAM
+### Running on Windows with 8 GB of VRAM
 
 - Set up the environment by following steps:
 
