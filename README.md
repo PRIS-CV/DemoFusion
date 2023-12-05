@@ -50,7 +50,7 @@ for i, image in enumerate(images):
 
 ### Running on Windows with 8 Gb of VRAM
 
-- Install dependencies as:
+- Set up the environment by following steps:
 
 ```
 cmd
