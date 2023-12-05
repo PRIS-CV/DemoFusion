@@ -607,6 +607,10 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
         pad_size = self.unet.config.sample_size // 4 * 3
         decoder_view_batch_size = 1
         
+        if self.lowvram:
+            core_stride = core_size // 2
+            pad_size = core_size
+
         views = self.get_views(current_height, current_width, stride=core_stride, window_size=core_size)
         views_batch = [views[i : i + decoder_view_batch_size] for i in range(0, len(views), decoder_view_batch_size)]
         latents_ = F.pad(latents, (pad_size, pad_size, pad_size, pad_size), 'constant', 0)
@@ -621,12 +625,12 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
                         latents_[:, :, h_start:h_end+pad_size*2, w_start:w_end+pad_size*2]
                         for h_start, h_end, w_start, w_end in batch_view
                     ]
-                )
+                ).to(self.vae.device)
                 image_patch = self.vae.decode(latents_for_view / self.vae.config.scaling_factor, return_dict=False)[0]
                 h_start, h_end, w_start, w_end = views[j]
                 h_start, h_end, w_start, w_end = h_start * self.vae_scale_factor, h_end * self.vae_scale_factor, w_start * self.vae_scale_factor, w_end * self.vae_scale_factor
                 p_h_start, p_h_end, p_w_start, p_w_end = pad_size * self.vae_scale_factor, image_patch.size(2) - pad_size * self.vae_scale_factor, pad_size * self.vae_scale_factor, image_patch.size(3) - pad_size * self.vae_scale_factor
-                image[:, :, h_start:h_end, w_start:w_end] += image_patch[:, :, p_h_start:p_h_end, p_w_start:p_w_end]
+                image[:, :, h_start:h_end, w_start:w_end] += image_patch[:, :, p_h_start:p_h_end, p_w_start:p_w_end].to(latents.device)
                 count[:, :, h_start:h_end, w_start:w_end] += 1
                 progress_bar.update()
         image = image / count
@@ -695,6 +699,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
         cosine_scale_3: Optional[float] = 1.,
         sigma: Optional[float] = 1.0,
         show_image: bool = False,
+        lowvram: bool = False,
     ):
         r"""
         Function invoked when calling the pipeline for generation.
@@ -838,6 +843,8 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
                 The standerd value of the gaussian filter.
             show_image (`bool`, defaults to False):
                 Determine whether to show intermediate results during generation.
+            lowvram (`bool`, defaults to False):
+                Try to fit in 8 Gb of VRAM, with xformers installed.
 
         Examples:
 
@@ -884,6 +891,12 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
             batch_size = prompt_embeds.shape[0]
 
         device = self._execution_device
+        self.lowvram = lowvram
+        if self.lowvram:
+            self.vae.cpu()
+            self.unet.cpu()
+            self.text_encoder.to(device)
+            self.text_encoder_2.to(device)
 
         # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
         # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
@@ -954,6 +967,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
             prompt_embeds = torch.cat([negative_prompt_embeds, prompt_embeds], dim=0)
             add_text_embeds = torch.cat([negative_pooled_prompt_embeds, add_text_embeds], dim=0)
             add_time_ids = torch.cat([negative_add_time_ids, add_time_ids], dim=0)
+        del negative_prompt_embeds, negative_pooled_prompt_embeds, negative_add_time_ids
 
         prompt_embeds = prompt_embeds.to(device)
         add_text_embeds = add_text_embeds.to(device)
@@ -977,9 +991,17 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
         
     ############################################################### Phase 1 #################################################################
 
+        if self.lowvram:
+            self.text_encoder.cpu()
+            self.text_encoder_2.cpu()
+        
         print("### Phase 1 Denoising ###")
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
+
+                if self.lowvram:
+                    self.vae.cpu()
+                    self.unet.to(device)
 
                 latents_for_view = latents
 
@@ -1023,15 +1045,28 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
                         
             anchor_mean = latents.mean()
             anchor_std = latents.std()
+            del latents_for_view, latent_model_input, noise_pred, noise_pred_text, noise_pred_uncond
+            if self.lowvram:
+                latents = latents.cpu()
+                torch.cuda.empty_cache()
             if not output_type == "latent":
                 # make sure the VAE is in float32 mode, as it overflows in float16
                 needs_upcasting = self.vae.dtype == torch.float16 and self.vae.config.force_upcast
+                
+                if self.lowvram:
+                    needs_upcasting = False # use madebyollin/sdxl-vae-fp16-fix in lowvram mode!
+                    self.unet.cpu()
+                    self.vae.to(device)
     
                 if needs_upcasting:
                     self.upcast_vae()
                     latents = latents.to(next(iter(self.vae.post_quant_conv.parameters())).dtype)
                 print("### Phase 1 Decoding ###")
-                image = self.vae.decode(latents / self.vae.config.scaling_factor, return_dict=False)[0]
+                if self.lowvram and multi_decoder:
+                    current_width_height = self.unet.config.sample_size * self.vae_scale_factor
+                    image = self.tiled_decode(latents, current_width_height, current_width_height)
+                else:
+                    image = self.vae.decode(latents / self.vae.config.scaling_factor, return_dict=False)[0]
                 # cast back to fp16 if needed
                 if needs_upcasting:
                     self.vae.to(dtype=torch.float16)
@@ -1045,8 +1080,11 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
             output_images.append(image[0])
                         
     ####################################################### Phase 2+ #####################################################
-        
         for current_scale_num in range(2, scale_num + 1):
+            if self.lowvram:
+                latents = latents.to(device)
+                self.unet.to(device)
+                torch.cuda.empty_cache()
             print("### Phase {} Denoising ###".format(current_scale_num))
             current_height = self.unet.config.sample_size * self.vae_scale_factor * current_scale_num
             current_width = self.unet.config.sample_size * self.vae_scale_factor * current_scale_num
@@ -1055,7 +1093,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
             else:
                 current_height = int(current_height * aspect_ratio)
         
-            latents = F.interpolate(latents, size=(int(current_height / self.vae_scale_factor), int(current_width / self.vae_scale_factor)), mode='bicubic')
+            latents = F.interpolate(latents.to(device), size=(int(current_height / self.vae_scale_factor), int(current_width / self.vae_scale_factor)), mode='bicubic')
 
             noise_latents = []
             noise = torch.randn_like(latents)
@@ -1251,10 +1289,18 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
     #########################################################################################################################################
 
                 latents = (latents - latents.mean()) / latents.std() * anchor_std + anchor_mean
+                if self.lowvram:
+                    latents = latents.cpu()
+                    torch.cuda.empty_cache()
                 if not output_type == "latent":
                     # make sure the VAE is in float32 mode, as it overflows in float16
                     needs_upcasting = self.vae.dtype == torch.float16 and self.vae.config.force_upcast
         
+                    if self.lowvram:
+                        needs_upcasting = False # use madebyollin/sdxl-vae-fp16-fix in lowvram mode!
+                        self.unet.cpu()
+                        self.vae.to(device)
+                    
                     if needs_upcasting:
                         self.upcast_vae()
                         latents = latents.to(next(iter(self.vae.post_quant_conv.parameters())).dtype)
