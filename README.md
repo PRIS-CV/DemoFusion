@@ -17,7 +17,7 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 - **2023.11.29**: 'pipeline_demofusion_sdxl' is released.
 
 # Usage
-### Running the default setting in the paper (will take  about 17 Gb of VRAM)
+### Running the default setting in the paper (will take about 17 Gb of VRAM)
 - The version requirements of core dependencies.
 ```
 torch==2.1.0
