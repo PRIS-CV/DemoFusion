@@ -17,6 +17,7 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 - **2023.11.29**: 'pipeline_demofusion_sdxl' is released.
 
 # Usage
+### Running the default setting in the paper (will take  about 17 Gb of VRAM)
 - The version requirements of core dependencies.
 ```
 torch==2.1.0
@@ -39,16 +40,20 @@ images = pipe(prompt, negative_prompt=negative_prompt,
               cosine_scale_1=3, cosine_scale_2=1, cosine_scale_3=1, sigma=0.8,
               multi_decoder=True, show_image=True
              )
+
+for i, image in enumerate(images):
+    image.save('image_' + str(i) + '.png')
 ```
 - Please feel free to try different prompts and resolutions.
 - Default hyper-parameters are recommended, but they may not be optimal for all cases. For specific impacts of each hyper-parameter, please refer to Appendix C in the DemoFusion paper.
 - The code was cleaned before the release. If you encounter any issues, please contact us.
 
-## Running on Windows with 8 Gb of VRAM
+### Running on Windows with 8 Gb of VRAM
 
-### Installation:
+- Install dependencies as:
 
-```cmd
+```
+cmd
 git clone "https://github.com/PRIS-CV/DemoFusion"
 cd DemoFusion
 python -m venv venv
@@ -57,9 +62,10 @@ pip install -U "xformers==0.0.22.post7+cu118" --index-url https://download.pytor
 pip install "diffusers==0.21.4" "matplotlib==3.8.2" "transformers==4.35.2" "accelerate==0.25.0"
 ```
 
-### Usage:
+- Launch DemoFusion as follows. The use case can be found in `demo_lowvram.py`.
 
-```python
+```
+python
 from pipeline_demofusion_sdxl import DemoFusionSDXLPipeline
 
 import torch
@@ -81,10 +87,8 @@ images = pipe(prompt, negative_prompt=negative_prompt,
              )
 
 for i, image in enumerate(images):
-    image.save('image_'+str(i)+'.png')
+    image.save('image_' + str(i) + '.png')
 ```
-
-You can run this example with `python demo_lowvram.py`
 
 ## Citation
 If you find this paper useful in your research, please consider citing:
