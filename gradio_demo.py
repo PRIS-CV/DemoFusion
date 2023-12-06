@@ -1,5 +1,6 @@
 import gradio as gr
 from pipeline_demofusion_sdxl import DemoFusionSDXLPipeline
+from gradio_imageslider import ImageSlider
 import torch
 
 def generate_images(prompt, negative_prompt, height, width, num_inference_steps, guidance_scale, cosine_scale_1, cosine_scale_2, cosine_scale_3, sigma, view_batch_size, stride, seed):
@@ -17,7 +18,7 @@ def generate_images(prompt, negative_prompt, height, width, num_inference_steps,
                   multi_decoder=True, show_image=False
                  )
 
-    return [image for _, image in enumerate(images)]
+    return (images[0], images[-1])
 
 iface = gr.Interface(
     fn=generate_images,
@@ -36,9 +37,10 @@ iface = gr.Interface(
         gr.Slider(minimum=8, maximum=96, step=8, value=64, label="Stride"),
         gr.Number(label="Seed", value=2013)
     ],
-    outputs=gr.Gallery(label="Generated Images"),
+    # outputs=gr.Gallery(label="Generated Images"),
+    outputs=ImageSlider(label="Comparison of SDXL and DemoFusion"),
     title="DemoFusion Gradio Demo",
     description="Generate images with the DemoFusion SDXL Pipeline."
 )
 
-iface.launch(server_name='114.113.235.51', server_port=8890)
+iface.launch()
