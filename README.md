@@ -13,10 +13,10 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 **Abstract**: High-resolution image generation with Generative Artificial Intelligence (GenAI) has immense potential but, due to the enormous capital investment required for training, it is increasingly centralised to a few large corporations, and hidden behind paywalls. This paper aims to democratise high-resolution GenAI by advancing the frontier of high-resolution generation while remaining accessible to a broad audience. We demonstrate that existing Latent Diffusion Models (LDMs) possess untapped potential for higher-resolution image generation. Our novel DemoFusion framework seamlessly extends open-source GenAI models, employing Progressive Upscaling, Skip Residual, and Dilated Sampling mechanisms to achieve higher-resolution image generation. The progressive nature of DemoFusion requires more passes, but the intermediate results can serve as "previews", facilitating rapid prompt iteration.
 
 # News
-- **2023.12.06**: Local [Gradio Demo](https://github.com/PRIS-CV/DemoFusion#Running-with-Gradio-demo) is now available! Better interaction and presentation!
-- **2023.12.04**: A [low-vram version](https://github.com/PRIS-CV/DemoFusion#Running-on-Windows-with-8-GB-of-VRAM) of DemoFusion is available! Thank [klimaleksus](https://github.com/klimaleksus) for the implementation!
-- **2023.12.01**: Integrated to :rocket: [Replicate](https://replicate.com/explore). Check out the online demo: [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion) Thank [Luis C.](https://github.com/lucataco) for the implementation!
-- **2023.11.29**: 'pipeline_demofusion_sdxl' is released.
+- **2023.12.06**: 🚀 Local [Gradio Demo](https://github.com/PRIS-CV/DemoFusion#Running-with-Gradio-demo) is now available! Better interaction and presentation!
+- **2023.12.04**: ✨ A [low-vram version](https://github.com/PRIS-CV/DemoFusion#Running-on-Windows-with-8-GB-of-VRAM) of DemoFusion is available! Thank [klimaleksus](https://github.com/klimaleksus) for the implementation!
+- **2023.12.01**: 🚀 Integrated to [Replicate](https://replicate.com/explore). Check out the online demo: [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion) Thank [Luis C.](https://github.com/lucataco) for the implementation!
+- **2023.11.29**: 💰 'pipeline_demofusion_sdxl' is released.
 
 # Usage
 ### Running the default setting in the paper (will take about 17 GB of VRAM)
