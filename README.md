@@ -90,7 +90,8 @@ for i, image in enumerate(images):
     image.save('image_' + str(i) + '.png')
 ```
 ### Running with Gradio demo
-- You can also launch DemoFusion via Gradio demo now -- try `python gradio_demo.py`! Better Interaction and Presentation！
+- Install `gradio` and `gradio_imageslider`.
+- Launch DemoFusion via Gradio demo now -- try `python gradio_demo.py`! Better Interaction and Presentation！
 <img src="figures/gradio_demo.png" width="600"/>
 
 ## Citation
