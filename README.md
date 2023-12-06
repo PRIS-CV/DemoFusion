@@ -8,7 +8,7 @@
 
 Code release for "DemoFusion: Democratising High-Resolution Image Generation With No 💰" (arXiv 2023)
 
-<img src="illustration.jpg" width="800"/>
+<img src="figures/illustration.jpg" width="800"/>
 
 **Abstract**: High-resolution image generation with Generative Artificial Intelligence (GenAI) has immense potential but, due to the enormous capital investment required for training, it is increasingly centralised to a few large corporations, and hidden behind paywalls. This paper aims to democratise high-resolution GenAI by advancing the frontier of high-resolution generation while remaining accessible to a broad audience. We demonstrate that existing Latent Diffusion Models (LDMs) possess untapped potential for higher-resolution image generation. Our novel DemoFusion framework seamlessly extends open-source GenAI models, employing Progressive Upscaling, Skip Residual, and Dilated Sampling mechanisms to achieve higher-resolution image generation. The progressive nature of DemoFusion requires more passes, but the intermediate results can serve as "previews", facilitating rapid prompt iteration.
 
@@ -47,6 +47,11 @@ for i, image in enumerate(images):
 - Please feel free to try different prompts and resolutions.
 - Default hyper-parameters are recommended, but they may not be optimal for all cases. For specific impacts of each hyper-parameter, please refer to Appendix C in the DemoFusion paper.
 - The code was cleaned before the release. If you encounter any issues, please contact us.
+- You can also launch DemoFusion via Gradio demo:
+```
+python gradio_demo.py
+```
+<img src="figures/gradio_demo.png" width="600"/>
 
 ### Running on Windows with 8 GB of VRAM
 
