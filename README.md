@@ -47,11 +47,6 @@ for i, image in enumerate(images):
 - Please feel free to try different prompts and resolutions.
 - Default hyper-parameters are recommended, but they may not be optimal for all cases. For specific impacts of each hyper-parameter, please refer to Appendix C in the DemoFusion paper.
 - The code was cleaned before the release. If you encounter any issues, please contact us.
-- You can also launch DemoFusion via Gradio demo:
-```
-python gradio_demo.py
-```
-<img src="figures/gradio_demo.png" width="600"/>
 
 ### Running on Windows with 8 GB of VRAM
 
@@ -94,6 +89,9 @@ images = pipe(prompt, negative_prompt=negative_prompt,
 for i, image in enumerate(images):
     image.save('image_' + str(i) + '.png')
 ```
+### Running with Gradio demo
+- You can also launch DemoFusion via Gradio demo now -- try `python gradio_demo.py`! Better Interaction and Presentation！
+<img src="figures/gradio_demo.png" width="600"/>
 
 ## Citation
 If you find this paper useful in your research, please consider citing:
