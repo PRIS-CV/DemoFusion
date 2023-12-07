@@ -840,7 +840,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
                 Control the strength of the gaussion filter. For specific impacts, please refer to Appendix C
                 in the DemoFusion paper.
             sigma (`float`, defaults to 1):
-                The standerd value of the gaussian filter.
+                The standard value of the gaussian filter.
             show_image (`bool`, defaults to False):
                 Determine whether to show intermediate results during generation.
             lowvram (`bool`, defaults to False):
