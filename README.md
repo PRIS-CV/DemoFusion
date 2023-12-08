@@ -47,6 +47,7 @@ images = pipe(prompt, negative_prompt=negative_prompt,
 for i, image in enumerate(images):
     image.save('image_' + str(i) + '.png')
 ```
+- ⚠️ When you have enough VRAM (e.g., generating 2048*2048 images on hardware with more than 18GB RAM), you can set `multi_decoder=False`, which can make the decoding process faster.
 - Please feel free to try different prompts and resolutions.
 - Default hyper-parameters are recommended, but they may not be optimal for all cases. For specific impacts of each hyper-parameter, please refer to Appendix C in the DemoFusion paper.
 - The code was cleaned before the release. If you encounter any issues, please contact us.
