@@ -1,0 +1,11 @@
+diffusers~=0.21.4
+torch~=2.1.0
+scipy~=1.11.3
+omegaconf~=2.3.0
+accelerate~=0.23.0
+transformers~=4.34.0
+tqdm
+einops
+matplotlib
+gradio
+gradio_imageslider
