@@ -29,10 +29,11 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 
 ## Starting with our code
 ### Running the default setting in the paper (will take about 17 GB of VRAM)
-- The version requirements of core dependencies.
+- Set up the dependencies as:
 ```
-torch==2.1.0
-diffusers==0.21.4
+conda create -n demofusion python=3.9
+conda activate demofusion
+pip install -r requirements.txt
 ```
 - Download `pipeline_demofusion_sdxl.py` and run it as follows. A use case can be found in `demo.ipynb`.
 ```
@@ -62,7 +63,7 @@ for i, image in enumerate(images):
 
 ### Running on Windows with 8 GB of VRAM
 
-- Set up the environment by following steps:
+- Set up the environment as:
 
 ```
 cmd
@@ -102,7 +103,7 @@ for i, image in enumerate(images):
     image.save('image_' + str(i) + '.png')
 ```
 ### Running with Gradio demo
-- Install `gradio` and `gradio_imageslider`.
+- Make sure you have installed `gradio` and `gradio_imageslider`.
 - Launch DemoFusion via Gradio demo now -- try `python gradio_demo.py`! Better Interaction and Presentation！
 <img src="figures/gradio_demo.png" width="600"/>
 
