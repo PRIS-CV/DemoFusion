@@ -1,9 +1,9 @@
 # DemoFusion
 [![Project Page](https://img.shields.io/badge/Project-Page-green.svg)](https://ruoyidu.github.io/demofusion/demofusion.html)
 [![arXiv](https://img.shields.io/badge/arXiv-2311.16973-b31b1b.svg)](https://arxiv.org/pdf/2311.16973.pdf)
-[![Hugging Face](https://img.shields.io/badge/img2img-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/spaces/radames/Enhance-This-DemoFusion-SDXL)
 [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/DemoFusion-colab/blob/main/DemoFusion_colab.ipynb)
+[![Hugging Face](https://img.shields.io/badge/img2img-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/spaces/radames/Enhance-This-DemoFusion-SDXL)
 [![Page Views Count](https://badges.toozhao.com/badges/01HFMAPCVTA1T32KN2PASNYGYK/blue.svg)](https://badges.toozhao.com/stats/01HFMAPCVTA1T32KN2PASNYGYK "Get your own page views count badge on badges.toozhao.com")
 
 Code release for "DemoFusion: Democratising High-Resolution Image Generation With No 💰" (arXiv 2023)
