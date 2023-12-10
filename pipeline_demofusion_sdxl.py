@@ -604,7 +604,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
         sample_size = self.unet.config.sample_size
         core_size = self.unet.config.sample_size // 4
         core_stride = core_size
-        pad_size = self.unet.config.sample_size // 4 * 3
+        pad_size = self.unet.config.sample_size // 8 * 3
         decoder_view_batch_size = 1
         
         if self.lowvram:
