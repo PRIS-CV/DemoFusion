@@ -691,6 +691,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
         negative_crops_coords_top_left: Tuple[int, int] = (0, 0),
         negative_target_size: Optional[Tuple[int, int]] = None,
         ################### DemoFusion specific parameters ####################
+        image_lr: Optional[torch.FloatTensor] = None,
         view_batch_size: int = 16,
         multi_decoder: bool = True,
         stride: Optional[int] = 64,
@@ -821,6 +822,8 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
                 [https://huggingface.co/papers/2307.01952](https://huggingface.co/papers/2307.01952). For more
                 information, refer to this issue thread: https://github.com/huggingface/diffusers/issues/4208.
             ################### DemoFusion specific parameters ####################
+            image_lr (`torch.FloatTensor`, *optional*, , defaults to None):
+                Low-resolution image input for upscaling. If provided, DemoFusion will encode it as the initial latent representation.
             view_batch_size (`int`, defaults to 16):
                 The batch size for multiple denoising paths. Typically, a larger batch size can result in higher 
                 efficiency but comes with increased GPU memory requirements.
@@ -897,6 +900,7 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
             self.unet.cpu()
             self.text_encoder.to(device)
             self.text_encoder_2.to(device)
+            image_lr.cpu()
 
         # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
         # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
@@ -989,98 +993,106 @@ class DemoFusionSDXLPipeline(DiffusionPipeline, FromSingleFileMixin, LoraLoaderM
 
         output_images = []
         
-    ############################################################### Phase 1 #################################################################
+    ###################################################### Phase Initialization ########################################################
 
         if self.lowvram:
             self.text_encoder.cpu()
             self.text_encoder_2.cpu()
-        
-        print("### Phase 1 Denoising ###")
-        with self.progress_bar(total=num_inference_steps) as progress_bar:
-            for i, t in enumerate(timesteps):
 
-                if self.lowvram:
-                    self.vae.cpu()
-                    self.unet.to(device)
-
-                latents_for_view = latents
-
-                # expand the latents if we are doing classifier free guidance
-                latent_model_input = (
-                    latents.repeat_interleave(2, dim=0)
-                    if do_classifier_free_guidance
-                    else latents
-                )
-                latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
-
-                # predict the noise residual
-                added_cond_kwargs = {"text_embeds": add_text_embeds, "time_ids": add_time_ids}
-                noise_pred = self.unet(
-                    latent_model_input,
-                    t,
-                    encoder_hidden_states=prompt_embeds,
-                    cross_attention_kwargs=cross_attention_kwargs,
-                    added_cond_kwargs=added_cond_kwargs,
-                    return_dict=False,
-                )[0]
-
-                # perform guidance
-                if do_classifier_free_guidance:
-                    noise_pred_uncond, noise_pred_text = noise_pred[::2], noise_pred[1::2]
-                    noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
-
-                if do_classifier_free_guidance and guidance_rescale > 0.0:
-                    # Based on 3.4. in https://arxiv.org/pdf/2305.08891.pdf
-                    noise_pred = rescale_noise_cfg(noise_pred, noise_pred_text, guidance_rescale=guidance_rescale)
-
-                # compute the previous noisy sample x_t -> x_t-1
-                latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=False)[0]
-
-                # call the callback, if provided
-                if i == len(timesteps) - 1 or ((i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0):
-                    progress_bar.update()
-                    if callback is not None and i % callback_steps == 0:
-                        step_idx = i // getattr(self.scheduler, "order", 1)
-                        callback(step_idx, t, latents)
-                        
-            anchor_mean = latents.mean()
-            anchor_std = latents.std()
+        if image_lr == None:
+            print("### Phase 1 Denoising ###")
+            with self.progress_bar(total=num_inference_steps) as progress_bar:
+                for i, t in enumerate(timesteps):
+    
+                    if self.lowvram:
+                        self.vae.cpu()
+                        self.unet.to(device)
+    
+                    latents_for_view = latents
+    
+                    # expand the latents if we are doing classifier free guidance
+                    latent_model_input = (
+                        latents.repeat_interleave(2, dim=0)
+                        if do_classifier_free_guidance
+                        else latents
+                    )
+                    latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
+    
+                    # predict the noise residual
+                    added_cond_kwargs = {"text_embeds": add_text_embeds, "time_ids": add_time_ids}
+                    noise_pred = self.unet(
+                        latent_model_input,
+                        t,
+                        encoder_hidden_states=prompt_embeds,
+                        cross_attention_kwargs=cross_attention_kwargs,
+                        added_cond_kwargs=added_cond_kwargs,
+                        return_dict=False,
+                    )[0]
+    
+                    # perform guidance
+                    if do_classifier_free_guidance:
+                        noise_pred_uncond, noise_pred_text = noise_pred[::2], noise_pred[1::2]
+                        noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+    
+                    if do_classifier_free_guidance and guidance_rescale > 0.0:
+                        # Based on 3.4. in https://arxiv.org/pdf/2305.08891.pdf
+                        noise_pred = rescale_noise_cfg(noise_pred, noise_pred_text, guidance_rescale=guidance_rescale)
+    
+                    # compute the previous noisy sample x_t -> x_t-1
+                    latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs, return_dict=False)[0]
+    
+                    # call the callback, if provided
+                    if i == len(timesteps) - 1 or ((i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0):
+                        progress_bar.update()
+                        if callback is not None and i % callback_steps == 0:
+                            step_idx = i // getattr(self.scheduler, "order", 1)
+                            callback(step_idx, t, latents)
             del latents_for_view, latent_model_input, noise_pred, noise_pred_text, noise_pred_uncond
-            if self.lowvram:
-                latents = latents.cpu()
-                torch.cuda.empty_cache()
-            if not output_type == "latent":
-                # make sure the VAE is in float32 mode, as it overflows in float16
-                needs_upcasting = self.vae.dtype == torch.float16 and self.vae.config.force_upcast
-                
-                if self.lowvram:
-                    needs_upcasting = False # use madebyollin/sdxl-vae-fp16-fix in lowvram mode!
-                    self.unet.cpu()
-                    self.vae.to(device)
-    
-                if needs_upcasting:
-                    self.upcast_vae()
-                    latents = latents.to(next(iter(self.vae.post_quant_conv.parameters())).dtype)
-                print("### Phase 1 Decoding ###")
-                if self.lowvram and multi_decoder:
-                    current_width_height = self.unet.config.sample_size * self.vae_scale_factor
-                    image = self.tiled_decode(latents, current_width_height, current_width_height)
-                else:
-                    image = self.vae.decode(latents / self.vae.config.scaling_factor, return_dict=False)[0]
-                # cast back to fp16 if needed
-                if needs_upcasting:
-                    self.vae.to(dtype=torch.float16)
-    
-            image = self.image_processor.postprocess(image, output_type=output_type)
-            if show_image:
-                plt.figure(figsize=(10, 10))
-                plt.imshow(image[0])
-                plt.axis('off')  # Turn off axis numbers and ticks
-                plt.show()
-            output_images.append(image[0])
+        else:
+            print("### Encoding Real Image ###")
+            latents = self.vae.encode(image_lr)
+            latents = latents.latent_dist.sample() * self.vae.config.scaling_factor
                         
-    ####################################################### Phase 2+ #####################################################
-        for current_scale_num in range(2, scale_num + 1):
+        anchor_mean = latents.mean()
+        anchor_std = latents.std()
+        if self.lowvram:
+            latents = latents.cpu()
+            torch.cuda.empty_cache()
+        if not output_type == "latent":
+            # make sure the VAE is in float32 mode, as it overflows in float16
+            needs_upcasting = self.vae.dtype == torch.float16 and self.vae.config.force_upcast
+            
+            if self.lowvram:
+                needs_upcasting = False # use madebyollin/sdxl-vae-fp16-fix in lowvram mode!
+                self.unet.cpu()
+                self.vae.to(device)
+
+            if needs_upcasting:
+                self.upcast_vae()
+                latents = latents.to(next(iter(self.vae.post_quant_conv.parameters())).dtype)
+            if self.lowvram and multi_decoder:
+                current_width_height = self.unet.config.sample_size * self.vae_scale_factor
+                image = self.tiled_decode(latents, current_width_height, current_width_height)
+            else:
+                image = self.vae.decode(latents / self.vae.config.scaling_factor, return_dict=False)[0]
+            # cast back to fp16 if needed
+            if needs_upcasting:
+                self.vae.to(dtype=torch.float16)
+    
+        image = self.image_processor.postprocess(image, output_type=output_type)
+        if show_image:
+            plt.figure(figsize=(10, 10))
+            plt.imshow(image[0])
+            plt.axis('off')  # Turn off axis numbers and ticks
+            plt.show()
+        output_images.append(image[0])
+                        
+    ####################################################### Phase Upscaling #####################################################
+        if image_lr == None:
+            starting_scale = 2
+        else:
+            starting_scale = 1
+        for current_scale_num in range(starting_scale, scale_num + 1):
             if self.lowvram:
                 latents = latents.to(device)
                 self.unet.to(device)
