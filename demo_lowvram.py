@@ -25,7 +25,7 @@ negative_prompt = "blurry, ugly, duplicate, poorly drawn, deformed, mosaic"
 
 images = pipe(prompt, negative_prompt=negative_prompt,
               height=2048, width=2048, view_batch_size=4, stride=64,
-              num_inference_steps=4, guidance_scale=7.5,
+              num_inference_steps=40, guidance_scale=7.5,
               cosine_scale_1=3, cosine_scale_2=1, cosine_scale_3=1, sigma=0.8,
               multi_decoder=True, show_image=False, lowvram=True
              )
