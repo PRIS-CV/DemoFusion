@@ -13,10 +13,11 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 **Abstract**: High-resolution image generation with Generative Artificial Intelligence (GenAI) has immense potential but, due to the enormous capital investment required for training, it is increasingly centralised to a few large corporations, and hidden behind paywalls. This paper aims to democratise high-resolution GenAI by advancing the frontier of high-resolution generation while remaining accessible to a broad audience. We demonstrate that existing Latent Diffusion Models (LDMs) possess untapped potential for higher-resolution image generation. Our novel DemoFusion framework seamlessly extends open-source GenAI models, employing Progressive Upscaling, Skip Residual, and Dilated Sampling mechanisms to achieve higher-resolution image generation. The progressive nature of DemoFusion requires more passes, but the intermediate results can serve as "previews", facilitating rapid prompt iteration.
 
 # News
-- **2023.12.08**: 🚀 A HuggingFace Demo for Img2Img is now available! [![Hugging Face](https://img.shields.io/badge/img2img-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/spaces/radames/Enhance-This-DemoFusion-SDXL) Thank [Radamés](https://github.com/radames) for the implementation and [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Diffusers-orange.svg)](https://huggingface.co/docs/diffusers/index) for the support!
+- **2023.12.10**: ✨ Image2Image is supported by `pipeline_demofusion_sdxl` now! The local [Gradio Demo](https://github.com/PRIS-CV/DemoFusion#Image2Image-with-Gradio-demo) is also available. ⚠️ Please note that, as a tuning-free framework, DemoFusion's Image2Image capability is strongly correlated with the SDXL's training data distribution and will show a significant bias. An accurate prompt to describe the content and style of the input also significantly improves performance. Have fun and regard it as a side application of text+image based generation.
+- **2023.12.08**: 🚀 A HuggingFace Demo for Img2Img is now available! [![Hugging Face](https://img.shields.io/badge/i2i-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/spaces/radames/Enhance-This-DemoFusion-SDXL) Thank [Radamés](https://github.com/radames) for the implementation and [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Diffusers-orange.svg)](https://huggingface.co/docs/diffusers/index) for the support!
 - **2023.12.07**: 🚀 Add Colab demo [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/DemoFusion-colab/blob/main/DemoFusion_colab.ipynb). Check it out! Thank [camenduru](https://github.com/camenduru) for the implementation!
-- **2023.12.06**: 🚀 Local [Gradio Demo](https://github.com/PRIS-CV/DemoFusion#Running-with-Gradio-demo) is now available! Better interaction and presentation!
-- **2023.12.04**: ✨ A [low-vram version](https://github.com/PRIS-CV/DemoFusion#Running-on-Windows-with-8-GB-of-VRAM) of DemoFusion is available! Thank [klimaleksus](https://github.com/klimaleksus) for the implementation!
+- **2023.12.06**: ✨ The local [Gradio Demo](https://github.com/PRIS-CV/DemoFusion#Text2Image-with-Gradio-demo) is now available! Better interaction and presentation!
+- **2023.12.04**: ✨ A [low-vram version](https://github.com/PRIS-CV/DemoFusion#Text2Image-on-Windows-with-8-GB-of-VRAM) of DemoFusion is available! Thank [klimaleksus](https://github.com/klimaleksus) for the implementation!
 - **2023.12.01**: 🚀 Integrated to [Replicate](https://replicate.com/explore). Check out the online demo: [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion) Thank [Luis C.](https://github.com/lucataco) for the implementation!
 - **2023.11.29**: 💰 `pipeline_demofusion_sdxl` is released.
 
@@ -25,10 +26,9 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 - HuggingFace Space: Try Text2Image generation at [![Hugging Face](https://img.shields.io/badge/t2i-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/spaces/fffiloni/DemoFusion) and Image2Image enhancement at [![Hugging Face](https://img.shields.io/badge/i2i-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/spaces/radames/Enhance-This-DemoFusion-SDXL).
 - Colab: Try Text2Image generation at [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/DemoFusion-colab/blob/main/DemoFusion_colab.ipynb) and Image2Image enhancement at [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/camenduru/DemoFusion-colab/blob/main/DemoFusion_img2img_colab.ipynb).
 - Replicate: Try Text2Image generation at [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion) and Image2Image enhancement at [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion-enhance).
-- ⚠️ For Image2Image enhancement, please note that DemoFusion's capability is strongly correlated with the SDXL's training data distribution and will show a significant bias. Have fun and regard this "enhancement" as a side application of text+image based generation.
 
 ## Starting with our code
-### Running the default setting in the paper (will take about 17 GB of VRAM)
+### Text2Image (will take about 17 GB of VRAM)
 - Set up the dependencies as:
 ```
 conda create -n demofusion python=3.9
@@ -61,7 +61,7 @@ for i, image in enumerate(images):
 - Default hyper-parameters are recommended, but they may not be optimal for all cases. For specific impacts of each hyper-parameter, please refer to Appendix C in the DemoFusion paper.
 - The code was cleaned before the release. If you encounter any issues, please contact us.
 
-### Running on Windows with 8 GB of VRAM
+### Text2Image on Windows with 8 GB of VRAM
 
 - Set up the environment as:
 
@@ -102,10 +102,15 @@ images = pipe(prompt, negative_prompt=negative_prompt,
 for i, image in enumerate(images):
     image.save('image_' + str(i) + '.png')
 ```
-### Running with Gradio demo
+### Text2Image with local Gradio demo
 - Make sure you have installed `gradio` and `gradio_imageslider`.
 - Launch DemoFusion via Gradio demo now -- try `python gradio_demo.py`! Better Interaction and Presentation！
 <img src="figures/gradio_demo.png" width="600"/>
+
+### Image2Image with local Gradio demo
+- Make sure you have installed `gradio` and `gradio_imageslider`.
+- Launch DemoFusion Image2Image by `python gradio_demo_img2img.py`.
+<img src="figures/gradio_demo_img2img.png" width="600"/>
 
 ## Citation
 If you find this paper useful in your research, please consider citing:
