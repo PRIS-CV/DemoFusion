@@ -73,7 +73,7 @@ with gr.Blocks(title=f"DemoFusion") as demo:
       with gr.Row():
         with gr.Group():
           image_input = gr.Image(type="pil", label="Input Image")
-          prompt = gr.Textbox(label="Prompt", value="8k high definition, high details")
+          prompt = gr.Textbox(label="Prompt", value="")
           negative_prompt = gr.Textbox(label="Negative Prompt", value="blurry, ugly, duplicate, poorly drawn, deformed, mosaic")
           controlnet_conditioning_scale = gr.Slider(minimum=0, maximum=1, step=0.1, value=0.5, label="ControlNet Conditioning Scale")
           width = gr.Slider(minimum=1024, maximum=4096, step=1024, value=2048, label="Width")
