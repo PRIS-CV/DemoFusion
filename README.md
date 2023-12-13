@@ -29,6 +29,24 @@ Code release for "DemoFusion: Democratising High-Resolution Image Generation Wit
 - Replicate: Try Text2Image generation at [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion) and Image2Image enhancement at [![Replicate](https://img.shields.io/badge/Demo-%F0%9F%9A%80%20Replicate-blue)](https://replicate.com/lucataco/demofusion-enhance).
 
 ## Starting with our code
+### Hyper-parameters
+- `view_batch_size` (`int`, defaults to 16):
+  The batch size for multiple denoising paths. Typically, a larger batch size can result in higher efficiency but comes with increased GPU memory requirements.
+- `stride` (`int`, defaults to 64):
+  The stride of moving local patches. A smaller stride is better for alleviating seam issues, but it also introduces additional computational overhead and inference time.
+- `cosine_scale_1` (`float`, defaults to 3):
+  Control the decreasing rate of skip-residual. A smaller value results in better consistency with low-resolution results, but it may lead to more pronounced upsampling noise. Please refer to Appendix C in the DemoFusion paper.
+- `cosine_scale_2` (`float`, defaults to 1):
+  Control the decreasing rate of dilated sampling. A smaller value can better address the repetition issue, but it may lead to grainy images. For specific impacts, please refer to Appendix C in the DemoFusion paper.
+- `cosine_scale_3` (`float`, defaults to 1):
+  Control the decrease rate of the Gaussian filter. A smaller value results in less grainy images, but it may lead to over-smoothing images. Please refer to Appendix C in the DemoFusion paper.
+- `sigma` (`float`, defaults to 1):
+  The standard value of the Gaussian filter. A larger sigma promotes the global guidance of dilated sampling, but it has the potential of over-smoothing.
+- `multi_decoder` (`bool`, defaults to True):
+  Determine whether to use a tiled decoder. Generally, a tiled decoder becomes necessary when the resolution exceeds 3072*3072 on an RTX 3090 GPU.
+- `show_image` (`bool`, defaults to False):
+  Determine whether to show intermediate results during generation.
+
 ### Text2Image (will take about 17 GB of VRAM)
 - Set up the dependencies as:
 ```
