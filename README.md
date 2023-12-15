@@ -57,6 +57,7 @@ pip install -r requirements.txt
 - Download `pipeline_demofusion_sdxl.py` and run it as follows. A use case can be found in `demo.ipynb`.
 ```
 from pipeline_demofusion_sdxl import DemoFusionSDXLPipeline
+import torch
 
 model_ckpt = "stabilityai/stable-diffusion-xl-base-1.0"
 pipe = DemoFusionSDXLPipeline.from_pretrained(model_ckpt, torch_dtype=torch.float16)
