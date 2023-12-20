@@ -43,7 +43,7 @@ def generate_images(prompt, negative_prompt, controlnet_conditioning_scale, heig
     padded_image = pad_image(input_image).resize((1024, 1024)).convert("RGB")
     image_lr = load_and_process_image(padded_image).to('cuda')
     controlnet = ControlNetModel.from_pretrained("diffusers/controlnet-canny-sdxl-1.0", torch_dtype=torch.float16)
-    vae = AutoencoderKL.from_pretrained("madebyollin/stable-diffusion-xl-base-1.0/vae-fix", torch_dtype=torch.float16)
+    vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16)
     pipe = DemoFusionSDXLControlNetPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", controlnet=controlnet, vae=vae, torch_dtype=torch.float16)
     pipe = pipe.to("cuda")
     generator = torch.Generator(device='cuda')
