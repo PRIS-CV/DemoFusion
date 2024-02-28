@@ -6,7 +6,7 @@
 [![Hugging Face](https://img.shields.io/badge/i2i-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/spaces/radames/Enhance-This-DemoFusion-SDXL)
 [![Page Views Count](https://badges.toozhao.com/badges/01HFMAPCVTA1T32KN2PASNYGYK/blue.svg)](https://badges.toozhao.com/stats/01HFMAPCVTA1T32KN2PASNYGYK "Get your own page views count badge on badges.toozhao.com")
 
-Code release for "DemoFusion: Democratising High-Resolution Image Generation With No 💰" (arXiv 2023)
+Code release for "DemoFusion: Democratising High-Resolution Image Generation With No 💰" 
 
 <img src="figures/illustration.jpg" width="800"/>
 
