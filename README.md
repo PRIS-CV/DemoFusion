@@ -145,10 +145,10 @@ for i, image in enumerate(images):
 ## Citation
 If you find this paper useful in your research, please consider citing:
 ```
-@article{du2023demofusion,
-  title={DemoFusion: Democratising High-Resolution Image Generation With No $$$},
+@inproceedings{du2024demofusion,
+  title={DemoFusion: Democratising High-Resolution Image Generation With No \$\$\$},
   author={Du, Ruoyi and Chang, Dongliang and Hospedales, Timothy and Song, Yi-Zhe and Ma, Zhanyu},
-  journal={arXiv preprint arXiv:2311.16973},
-  year={2023}
+  booktitle={CVPR},
+  year={2024}
 }
 ```
